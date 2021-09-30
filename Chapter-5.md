@@ -34,15 +34,36 @@
    
    4. 
    - 域关系演算：$\{hotelName, guestName, dateFrom1, dateFrom2 | (\exists dateFrom1,dateFrom2,dateTo1,dateTo2) Hotel(hotelNo,hotelName,city) \land Guest(guestNo,guestName,guestAddress) \land Booking(hotelNo,guestNo,dateFrom1,dateTo1,roomNo) \land Booking(hotelNo,guestNo,dateFrom2,dateTo2,roomNo) \land dateFrom1 \ne dateFrom2\}$  
-   - 关系代数：$\prod_{hotelName,guestName,Booking.dateFrom,Booking.dateFrom}(Hotel \ \Join_{hotelNo,roomNo} \ (Guest \ \Join_{uestNo} (\sigma_{Booking.dateFrom \ne Booking.dateFrom}(Booking \times Booking))))$
+   - 关系代数：$\prod_{hotelName,guestName,Booking.dateFrom,Booking.dateFrom}(Hotel \ \Join_{hotelNo,roomNo} \ (Guest \ \Join_{guestNo} (\sigma_{Booking.dateFrom \ne Booking.dateFrom}(Booking \times Booking))))$
 5. 给出下列查询所对应的关系代数、元组关系演算和域关系演算表达式：
    - 列出所有的酒店。
+     - 关系代数： $\sigma_{predicate}(Hotel)$
+     - 元组关系演算：$\{S|Hotel(S)\}$
+     - 域关系演算表达式：$\{hotelNo,hotelName,city|Hotel(hotelNo,hotelName,city)\}$
    - 列出所有价格低于每晚20英镑的单人间。
+     - 关系代数： $\sigma_{price < 20 \land type = 'single'}(Room)$
+     - 元组关系演算：$\{S|(\exists S) \ Room(S) \land S.price < 20 \ \land S.type = 'single'\}$
+     - 域关系演算表达式：$\{roomNo,hotelNo,type,price|(\exists price) (Room(roomNo,hotelNo,'single',price) \ \land price < 20)\}$
    - 列出所有客人的姓名和所属城市。
-   - 列出格罗夫纳酒店中所有房间的价格和类型。
+     - 关系代数：$\prod_{guestName,city}((Booking \Join_{hotelNo} Hotel) \Join_{guestNo} Guest)$
+     - 元组关系演算：$\{S.guestName,B.city|Guest(S) \land ((\exists B)(\exists C)(Hotel(B) \land Booking(C) \land B.hotelNo = C.hotelNo \land S.guestNo = C.guestNo))\}$
+     - 域关系演算表达式：$\{(gNm,ct)|Guest(gNo1,gNm,gA) \land Booking(hNo1,gNo2,dF,dT,rNo) \land Hotel(hNo2,hNm,ct) \land (gNo1 = gNo2) \land (hNo1 = hNo2)\}$
+   - 列出格罗夫纳酒店中所有房间的价格和类型。    
+     - 关系代数： $\prod_{price,type}(\sigma_{hotelName = 'Grolav'}(Room \Join_{hotelNo} Hotel))$
+     - 元组关系演算：$\{S.price,S.type|Room(S) \land ((\exists B) (Hotel(B) \land B.hotelName = 'Grolav'))\}$
+     - 域关系演算表达式：$\{(price,type)|Room(rNo,hNo1,type,price) \land Hotel(hNo2,hNm,city) \land hNm = 'Grolav' \land hNo1 = hNo2\}$
    - 列出当前住在格罗夫纳酒店里的所有客人。
+     - 关系代数： $\prod_{guestNo} (\sigma_{hotelName = 'Grolav'}(Booking \Join_{hotelNo} Hotel))$
+     - 元组关系演算：$\{S.guestNo|Booking(S) \land ((\exists B) (Hotel(B) \land B.hotelName = 'Grolav' \land S.hotelNo = B.hotelNo))\}$
+     - 域关系演算表达式：$\{gstNo|Booking(hNo1,gstNo,dF,dT,rNo) \land Hotel(hNo2,'Grolav',city) \land hNo1 = hNo2\}$
    - 列出格罗夫纳酒店中所有房间的详细资料。如果房间已经被占用，还应该包括租用此房间的客人的姓名。
+     - 关系代数： 
+     - 元组关系演算：
+     - 域关系演算表达式：
    - 列出住在格罗夫纳酒店的所有客人的详细资料(guestNo、guestName和guestAddress) 
+     - 关系代数： 
+     - 元组关系演算：
+     - 域关系演算表达式：
 6. 使用关系代数创建一个包含格罗夫纳酒店中所有房间的视图，并隐藏价格信息。说明这个视图的优点。
    
 # 案例二：下表是存在某RDBMS中的数据库的一部分
@@ -94,11 +115,12 @@
 22. 列出有预期未还图书的读者的姓名。
 
 ## 用关系代数表达式表达下列查询。
-23. ISBN 为"0-321-52306-7"的书有多少木？
+23. ISBN 为"0-321-52306-7"的书有多少本？
 24. ISBN 为"0-321-52306-7"的书还有多少本可外借？
 25. ISBN 为"0-321-52306-7"的书目借出过多少次？
 26. 产生由Peter Bloomfield借阅的图书的书目表。
 27. 对馆藏多于三个副本的书目，列出借阅过它的读者的姓名。
 28. 产生当前借有图书逾期未还的读者的情况报表。
 29. 产生每个书目被借阅总次数的报表。
+
 30. 分析当前你所使用的RDBMS 。系统提供了哪几种关系语言？对于所提供的每种语言，找出与八个关系代数运算等价的运算。
